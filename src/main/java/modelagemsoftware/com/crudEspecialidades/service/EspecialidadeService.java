@@ -40,5 +40,31 @@ public class EspecialidadeService {
         return especialidade;
     }
 
+    public Especialidade atualizarEspecialidade(Long id, Especialidade dadosAtualizados) throws IllegalAccessException {
+        Especialidade especialidadeExistente = buscarPorId(id);
+        String novoNome = dadosAtualizados.getNome();
 
-}
+        if (novoNome != null && !novoNome.equals(especialidadeExistente.getNome())){
+            if (repository.existsByNomeAndAtivoTrueAndIdNot(novoNome, id)){
+                throw new IllegalAccessException("O nome " + novoNome + "já está em uso por outra especialidade");
+            }
+            especialidadeExistente.setNome(novoNome);
+        }
+        if (dadosAtualizados.getDescricao() != null){
+            especialidadeExistente.setDescricao(dadosAtualizados.getDescricao());
+        }
+
+        return repository.save(especialidadeExistente);
+    }
+
+    public void deletarPorId(Long id){
+
+        Especialidade especialidade = buscarPorId(id);
+
+        especialidade.setAtivo(false); //seta a flag para false
+        repository.save(especialidade);
+    }
+    }
+
+
+

@@ -49,6 +49,34 @@ public class EspecialidadeController {
         }
 
     }
+    @PutMapping("/{id}")
+    public ResponseEntity atualizarEspecialidade(@PathVariable Long id, @RequestBody Especialidade especialidade){
+        try {
+            Especialidade especialidadeAtualizada = service.atualizarEspecialidade(id, especialidade);
+            return ResponseEntity.ok(especialidadeAtualizada);
+
+        }catch (RecusroNaoEncontradoException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+
+        } catch (IllegalAccessException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity deletarEspecialidade(@PathVariable Long id){
+        // 204 NO CONTENT: Código HTTP correto para um DELETE bem-sucedido
+        // onde não há corpo de resposta para retornar.
+        try {
+            service.deletarPorId(id);
+            return ResponseEntity.noContent().build();
+        } catch (RecusroNaoEncontradoException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao tentar deletar a espcialidade " + e.getMessage());
+        }
+    }
 
 
 }

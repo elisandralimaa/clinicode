@@ -14,4 +14,6 @@ public interface EspecialidadeRepository extends JpaRepository<Especialidade, Lo
     //método soft delete:
     //o spring interpreta este nome como: "select * FROM especialidades WHERE ativo= TRUE"
     List<Especialidade> findAllByAtivoTrue();
+    boolean existsByNomeAndAtivoTrueAndIdNot(String nome, Long id);
 }
+
